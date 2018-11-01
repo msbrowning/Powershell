@@ -5,6 +5,6 @@
 $location = "\\server\share\folder\"
 
 Get-ChildItem -Path $location -Attributes !Directory |
-Where-Object -FilterScript {$_.CreationTime -le (Get-Date).AddDays(-30)} | 
+Where-Object -FilterScript {$_.CreationTime -le (Get-Date).AddDays(-7)} | 
 Select-Object -Property Name, LastWriteTime, LastAccessTime |
 Format-Table
