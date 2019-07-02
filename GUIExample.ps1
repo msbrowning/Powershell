@@ -3,6 +3,7 @@
  # Reference: https://theitbros.com/powershell-gui-for-scripts/
  # Simple tool: https://poshgui.com/Editor
  #>
+#TODO: Pasword Expired, Create AD User, Disable AD User, Reset AD password
 # Add .Net forms type
 Add-Type -assembly System.Windows.Forms
 
@@ -18,7 +19,7 @@ $Label01.AutoSize = $true
 $main_form.Controls.Add($Label01)
 $ComboBox = New-Object System.Windows.Forms.ComboBox
 $ComboBox.Width = 300
-$Users = get-aduser -filter * -Properties SamAccountName
+$Users = get-aduser -Identity "msbrowning" -Properties SamAccountName
 Foreach ($User in $Users)
 {
 $ComboBox.Items.Add($User.SamAccountName);
