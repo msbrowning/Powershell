@@ -19,14 +19,21 @@ function Verb-Noun {
         # Support for multiple systems
         [Parameter(Mandatory=$true,
         Position=0,
+        ValueFromPipeline=$true,
         ValueFromPipelineByPropertyName=$true)]
-        [string[]]$ComputerName,
+        [ValidateNotNullOrEmpty()]
+        [ValidateLength(1,15)]
+        [Alias('HostName')]
+        [string[]]
+        $ComputerName,
         # Switch to enable Error logging
         [Parameter()]
-        [switch]$ErrorLog,
+        [switch]
+        $ErrorLog,
         # Error log file location
         [Parameter()]
-        [string]$LogFile = 'C:\errorlog.txt'
+        [string]
+        $LogFile = 'C:\errorlog.txt'
     )
     
     begin {
@@ -41,6 +48,22 @@ function Verb-Noun {
     }
     
     process {
+        try {
+            
+        }
+        catch {
+            Write-Warning -Message "An error was encountered with $C"
+            if ($ErrorLog) {
+                #TODO change to write-eventlog to record time savings
+                # Idea based from https://channel9.msdn.com/series/advpowershell3/07
+                Get-Date | Out-File $LogFile -Force
+                $C | Out-File $LogFile -Append
+                $CurrentError | Out-File $LogFile -Append
+            }
+        }
+        finally {
+            
+        }
     }
     
     end {
