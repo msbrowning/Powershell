@@ -20,9 +20,8 @@ $main_form.Controls.Add($Label01)
 $ComboBox = New-Object System.Windows.Forms.ComboBox
 $ComboBox.Width = 300
 $Users = get-aduser -Identity "msbrowning" -Properties SamAccountName
-Foreach ($User in $Users)
-{
-$ComboBox.Items.Add($User.SamAccountName);
+Foreach ($User in $Users){
+    $ComboBox.Items.Add($User.SamAccountName);
 }
 $ComboBox.Location  = New-Object System.Drawing.Point(60,10)
 $main_form.Controls.Add($ComboBox)
@@ -41,10 +40,8 @@ $Button.Location = New-Object System.Drawing.Size(400,10)
 $Button.Size = New-Object System.Drawing.Size(120,23)
 $Button.Text = "Check"
 $main_form.Controls.Add($Button)
-$Button.Add_Click(
-{
-$Label03.Text =  [datetime]::FromFileTime((Get-ADUser -identity $ComboBox.selectedItem -Properties pwdLastSet).pwdLastSet).ToString('MM dd yy : hh ss')
-}
-)
+$Button.Add_Click({
+    $Label03.Text =  [datetime]::FromFileTime((Get-ADUser -identity $ComboBox.selectedItem -Properties pwdLastSet).pwdLastSet).ToString('MM dd yy : hh ss')
+})
 
 $main_form.ShowDialog()
