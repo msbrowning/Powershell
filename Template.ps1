@@ -17,23 +17,21 @@ function Verb-Noun {
     [CmdletBinding()]
     param (
         # Support for multiple systems
-        [Parameter(Mandatory=$true,
-        Position=0,
-        ValueFromPipeline=$true,
-        ValueFromPipelineByPropertyName=$true)]
+        [Parameter(
+            Mandatory=$true,
+            Position=0,
+            ValueFromPipeline=$true,
+            ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
         [ValidateLength(1,15)]
         [Alias('HostName')]
-        [string[]]
-        $ComputerName,
+        [string[]]$ComputerName,
         # Switch to enable Error logging
         [Parameter()]
-        [switch]
-        $ErrorLog,
+        [switch]$ErrorLog,
         # Error log file location
         [Parameter()]
-        [string]
-        $LogFile = 'C:\errorlog.txt'
+        [string]$LogFile = 'C:\errorlog.txt'
     )
     
     begin {
@@ -49,7 +47,7 @@ function Verb-Noun {
     
     process {
         try {
-            
+            # -ErrorAction Stop -ErrorVariable CurrentError
         }
         catch {
             Write-Warning -Message "An error was encountered with $C"
