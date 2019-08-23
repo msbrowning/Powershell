@@ -1,3 +1,4 @@
+# Reference: https://www.itprotoday.com/powershell/getting-computer-uptime-using-powershell
 <#
 .SYNOPSIS
     Short description
@@ -13,7 +14,7 @@
 .NOTES
     General notes
 #>
-function Get-CompInfo {
+function Get-ComputerUptime {
     [CmdletBinding()]
     param (
         # Support for multiple systems
@@ -48,23 +49,11 @@ function Get-CompInfo {
         foreach ($Computer in $ComputerName){
 
             Try{
-                $os=Get-Wmiobject -ComputerName $Computer -Class Win32_OperatingSystem -ErrorAction Stop -ErrorVariable CurrentError
-                $Disk=Get-WmiObject -ComputerName $Computer -class Win32_LogicalDisk -filter "DeviceID='c:'"
-                $Bios=Get-WmiObject -ComputerName $Computer -Class Win32_bios 
-                $GPU=Get-WmiObject -ComputerName $Computer -Class win32_VideoController
-
-                $Prop=[ordered]@{ #With or without [ordered]
-                    'ComputerName'=$Computer;
-                    'OS Name'=$os.caption;
-                    'OS Build'=$os.buildnumber;
-                    'Bios Version'=$Bios.Version;
-                    'Video Controller 1'=$GPU[0].Description
-                    'Video Controller 2'=$GPU[1].Description
-                    'FreeSpace'=$Disk.freespace / 1gb -as [int]
-                    'Total Space'=$Disk.Size /  1gb -as [int]
-                }
-                $Obj=New-Object -TypeName PSObject -Property $Prop 
-                Write-Output $Obj
+                $cimString = (Get-WmiObject Win32_OperatingSystem -ErrorAction Stop -ErrorVariable CurrentError -ComputerName $computer).LastBootUpTime
+                $dateTime = [Management.ManagementDateTimeConverter]::ToDateTime($cimString)
+                $timeSpan = (Get-Date) - $dateTime
+                Write-Host $computer "uptime is:"
+                "{0:00} d {1:00} h {2:00} m {3:00} s" -f $timeSpan.Days,$timeSpan.Hours,$timeSpan.Minutes,$timeSpan.Seconds
             }
             Catch{
                 Write-warning "Cannot connect to computer: $Computer"
