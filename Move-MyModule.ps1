@@ -13,7 +13,7 @@
 .NOTES
     Created by: Mark Browning III
 #>
-function Verb-Noun {
+function Move-MyModule {
     [CmdletBinding()]
     param (
         # Support for multiple systems
@@ -23,9 +23,7 @@ function Verb-Noun {
             ValueFromPipeline=$true,
             ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateLength(1,15)]
-        [Alias('HostName')]
-        [string[]]$ComputerName,
+        [string[]]$MyModulePath,
         # Switch to enable Error logging
         [Parameter()]
         [switch]$ErrorLog,
@@ -40,22 +38,25 @@ function Verb-Noun {
         } else {
             Write-Verbose 'Error logging is off'
         }
-        foreach ($Computer in $ComputerName) {
-            Write-Verbose "Computer: $Computer"
+        foreach ($My in $MyModulePath) {
+            Write-Verbose "Module Path: $My"
         }
     }
     
     process {
         try {
             # -ErrorAction Stop -ErrorVariable CurrentError
+            foreach ($My in $MyModulePath) {
+                Copy-Item -Path $My -Destination '$HOME\Documents\WindowsPowershell\Modules' -ErrorAction Stop -ErrorVariable CurrentError
+            }
         }
         catch {
-            Write-Warning -Message "An error was encountered with $Computer"
+            Write-Warning -Message "An error was encountered with $My"
             if ($ErrorLog) {
                 #TODO change to write-eventlog to record time savings
                 # Idea based from https://channel9.msdn.com/series/advpowershell3/07
                 Get-Date | Out-File $LogFile -Force
-                $Computer | Out-File $LogFile -Append
+                $My | Out-File $LogFile -Append
                 $CurrentError | Out-File $LogFile -Append
             }
         }
