@@ -13,7 +13,7 @@ $_ = import-csv -Path "\\server\share\folder\NewUsers.csv" | ForEach-Object
         $Division = $_.Division
         $Department = $_.Department
         $JobTitle = $_.JobTitle
-        #$Manager = $_.Manager
+        $Manager = $_.Manager
         $Phone = $_.Phone
         #$Name = $SurName + ", " + $GivenName + ", " + $Middle
         $DisplayName = $GivenName + " " + $SurName
@@ -46,7 +46,8 @@ $_ = import-csv -Path "\\server\share\folder\NewUsers.csv" | ForEach-Object
         -Company "$Company" `
         -Title "$JobTitle" `
         -EmailAddress "$Email" `
-        -OfficePhone "$Phone"
+        -OfficePhone "$Phone" `
+        -Manager "$Manager"
 
         # Set new user's password
         
